@@ -1,0 +1,26 @@
+eureka:
+ client:
+   register-with-eureka: true
+   fetch-registry: true
+   serviceUrl:
+     defaultZone: ${EUREKA_SERVER:http://localhost:8091/eureka}
+ instance:
+   preferIpAddress: true 
+spring:
+ main:
+  web-application-type: reactive
+ cloud:
+   gateway:
+    routes:
+     - id: authentication
+       uri: lb://AUTHENTICATION-SERVICE
+       predicates:
+       - Path=/api/v1/auth/**
+     - id: timing
+       uri: lb://TIME-TRACKING-SERVICE
+       predicates:
+       - Path=/api/v1/entry/**
+     - id: request
+       uri: lb://REQUEST-SERVICE
+       predicates:
+       - Path=/api/v1/requests/**
